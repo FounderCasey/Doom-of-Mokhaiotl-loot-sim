@@ -6,7 +6,10 @@ import CollectionLog from "@/components/CollectionLog.vue";
 
 <template>
   <div class="app-container">
-    <h1 class="app-title">Doom of Mokhaiotl Loot Simulator</h1>
+    <header class="app-header">
+      <h1 class="app-title">Doom of Mokhaiotl</h1>
+      <p class="app-subtitle">Loot Simulator</p>
+    </header>
 
     <ControlsBar />
 
@@ -16,7 +19,7 @@ import CollectionLog from "@/components/CollectionLog.vue";
     </main>
 
     <footer class="app-footer">
-      Data from
+      <span>Data sourced from</span>
       <a
         href="https://oldschool.runescape.wiki/w/Doom_of_Mokhaiotl"
         target="_blank"
@@ -24,11 +27,22 @@ import CollectionLog from "@/components/CollectionLog.vue";
       >
         OSRS Wiki
       </a>
+      <span class="footer-divider">|</span>
+      <span>Ironman? Join</span>
+      <a
+        href="https://wiseoldman.net/groups/12095"
+        target="_blank"
+        rel="noopener"
+      >
+        IronKin
+      </a>
     </footer>
   </div>
 </template>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 *,
 *::before,
 *::after {
@@ -42,11 +56,34 @@ html {
 }
 
 body {
-  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-  background: #0f0f0f;
-  color: #e0e0e0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(180deg, #0a0a0f 0%, #12121a 50%, #0a0a0f 100%);
+  background-attachment: fixed;
+  color: #e4e4e7;
   min-height: 100vh;
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
 }
 </style>
 
@@ -56,37 +93,63 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem 1rem;
+  padding: 3rem 1.5rem;
+  gap: 1.5rem;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 0.5rem;
 }
 
 .app-title {
-  font-family: "Times New Roman", serif;
-  font-size: 2rem;
-  color: #d4af37;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-  margin-bottom: 1.5rem;
-  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+}
+
+.app-subtitle {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #71717a;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 0.25rem;
 }
 
 .main-content {
   width: 100%;
-  max-width: 700px;
+  max-width: 640px;
   display: flex;
   flex-direction: column;
+  gap: 1.5rem;
 }
 
 .app-footer {
-  margin-top: 2rem;
-  color: #666;
+  margin-top: auto;
+  padding-top: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #52525b;
   font-size: 0.8rem;
 }
 
 .app-footer a {
-  color: #d4af37;
+  color: #a1a1aa;
   text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 .app-footer a:hover {
-  text-decoration: underline;
+  color: #fbbf24;
+}
+
+.footer-divider {
+  color: #3f3f46;
 }
 </style>
