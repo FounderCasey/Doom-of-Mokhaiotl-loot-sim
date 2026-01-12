@@ -1,10 +1,6 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
-import {
-  UNIQUE_ITEMS,
-  DEMON_TEAR_PRICE,
-  getTotalTearsForRun,
-} from "@/data/dropRates";
+import { UNIQUE_ITEMS, DEMON_TEAR_PRICE } from "@/data/dropRates";
 
 export interface LootDrop {
   itemId: string;
@@ -13,19 +9,19 @@ export interface LootDrop {
   runNumber: number;
 }
 
-export interface RunResult {
-  runNumber: number;
-  maxDelve: number;
-  demonTears: number;
-  uniqueDrops: LootDrop[];
-  gpValue: number;
+export interface LootItem {
+  id: string;
+  name: string;
+  count: number;
+  image?: string;
+  isUnique?: boolean;
 }
 
 export const useLootStore = defineStore("loot", () => {
   // Settings
   const maxDelveLevel = ref(9);
   const runsToSimulate = ref(100);
-  const simulationSpeed = ref<"instant" | "fast" | "normal" | "slow">("fast");
+  const rollInterval = ref(100);
 
   // Simulation state
   const isSimulating = ref(false);
@@ -40,9 +36,20 @@ export const useLootStore = defineStore("loot", () => {
     pet: 0,
   });
   const totalDemonTears = ref(0);
-  const runHistory = ref<RunResult[]>([]);
-  const longestDryStreak = ref(0);
-  const currentDryStreak = ref(0);
+
+  // Track roll numbers when each unique was obtained
+  const uniqueObtainedAtRolls = ref<Record<string, number[]>>({
+    cloth: [],
+    eye: [],
+    treads: [],
+    pet: [],
+  });
+
+  // Last roll loot display
+  const lastRollLoot = ref<LootItem[]>([]);
+
+  // Accumulated loot from all rolls
+  const accumulatedLoot = ref<LootItem[]>([]);
 
   // Computed values
   const totalGP = computed(() => {
@@ -53,47 +60,81 @@ export const useLootStore = defineStore("loot", () => {
     return gp;
   });
 
-  const gpPerRun = computed(() => {
-    if (totalRuns.value === 0) return 0;
-    return Math.floor(totalGP.value / totalRuns.value);
-  });
-
   const totalUniques = computed(() => {
     return Object.values(uniqueCounts.value).reduce((sum, count) => sum + count, 0);
   });
 
-  // Actions
-  function addRunResult(result: RunResult) {
-    totalRuns.value++;
-    totalDemonTears.value += result.demonTears;
+  function getItemImage(itemId: string): string | null {
+    const images: Record<string, string> = {
+      cloth: "/src/assets/images/mokhaiotl_cloth.png",
+      eye: "/src/assets/images/eye_of_ayak.png",
+      treads: "/src/assets/images/avernic_treads.png",
+      pet: "/src/assets/images/dom.png",
+      demon_tears: "/src/assets/images/demon_tear.png",
+    };
+    return images[itemId] || null;
+  }
 
-    if (result.uniqueDrops.length > 0) {
-      for (const drop of result.uniqueDrops) {
-        uniqueCounts.value[drop.itemId] = (uniqueCounts.value[drop.itemId] || 0) + 1;
+  // Actions
+  function addRollResult(
+    demonTears: number,
+    uniqueDrops: LootDrop[],
+    commonLoot: LootItem[]
+  ) {
+    totalRuns.value++;
+    totalDemonTears.value += demonTears;
+
+    // Update unique counts and track roll numbers
+    for (const drop of uniqueDrops) {
+      uniqueCounts.value[drop.itemId] = (uniqueCounts.value[drop.itemId] || 0) + 1;
+      if (!uniqueObtainedAtRolls.value[drop.itemId]) {
+        uniqueObtainedAtRolls.value[drop.itemId] = [];
       }
-      // Reset dry streak on unique drop
-      if (currentDryStreak.value > longestDryStreak.value) {
-        longestDryStreak.value = currentDryStreak.value;
-      }
-      currentDryStreak.value = 0;
-    } else {
-      currentDryStreak.value++;
+      uniqueObtainedAtRolls.value[drop.itemId].push(totalRuns.value);
     }
 
-    // Keep only last 500 runs in history for performance
-    runHistory.value.push(result);
-    if (runHistory.value.length > 500) {
-      runHistory.value.shift();
+    // Build last roll display
+    lastRollLoot.value = [...commonLoot];
+
+    // Add demon tears to display
+    if (demonTears > 0) {
+      lastRollLoot.value.push({
+        id: "demon_tears",
+        name: "Demon Tears",
+        count: demonTears,
+        image: getItemImage("demon_tears") || undefined,
+      });
+    }
+
+    // Add unique drops to display
+    for (const drop of uniqueDrops) {
+      lastRollLoot.value.push({
+        id: drop.itemId,
+        name: drop.itemName,
+        count: 1,
+        image: getItemImage(drop.itemId) || undefined,
+        isUnique: true,
+      });
+    }
+
+    // Merge into accumulated loot
+    for (const item of lastRollLoot.value) {
+      const existing = accumulatedLoot.value.find((l) => l.id === item.id);
+      if (existing) {
+        existing.count += item.count;
+      } else {
+        accumulatedLoot.value.push({ ...item });
+      }
     }
   }
 
   function reset() {
     totalRuns.value = 0;
     uniqueCounts.value = { cloth: 0, eye: 0, treads: 0, pet: 0 };
+    uniqueObtainedAtRolls.value = { cloth: [], eye: [], treads: [], pet: [] };
     totalDemonTears.value = 0;
-    runHistory.value = [];
-    longestDryStreak.value = 0;
-    currentDryStreak.value = 0;
+    lastRollLoot.value = [];
+    accumulatedLoot.value = [];
     currentRun.value = 0;
     isSimulating.value = false;
   }
@@ -110,25 +151,25 @@ export const useLootStore = defineStore("loot", () => {
     // Settings
     maxDelveLevel,
     runsToSimulate,
-    simulationSpeed,
+    rollInterval,
     // State
     isSimulating,
     currentRun,
     // Results
     totalRuns,
     uniqueCounts,
+    uniqueObtainedAtRolls,
     totalDemonTears,
-    runHistory,
-    longestDryStreak,
-    currentDryStreak,
+    lastRollLoot,
+    accumulatedLoot,
     // Computed
     totalGP,
-    gpPerRun,
     totalUniques,
     // Actions
-    addRunResult,
+    addRollResult,
     reset,
     setSimulating,
     setCurrentRun,
+    getItemImage,
   };
 });
