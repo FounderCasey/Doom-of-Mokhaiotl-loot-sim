@@ -75,28 +75,31 @@ function updatePosition(e: MouseEvent) {
           class="tooltip-container"
           :style="{ left: tooltipX + 'px', top: tooltipY + 'px' }"
         >
-          <div class="tooltip-header">
-            <img v-if="image" :src="image" class="tooltip-img" />
-            <div class="tooltip-title">
-              <span class="tooltip-name">{{ name }}</span>
-              <span v-if="subtitle" class="tooltip-subtitle">{{ subtitle }}</span>
+          <div class="tooltip-border"></div>
+          <div class="tooltip-inner">
+            <div class="tooltip-header">
+              <img v-if="image" :src="image" class="tooltip-img" />
+              <div class="tooltip-title">
+                <span class="tooltip-name">{{ name }}</span>
+                <span v-if="subtitle" class="tooltip-subtitle">{{ subtitle }}</span>
+              </div>
             </div>
-          </div>
 
-          <div v-if="count !== undefined && count > 0" class="tooltip-stat">
-            <span class="stat-label">Obtained</span>
-            <span class="stat-value">{{ count }}x</span>
-          </div>
+            <div v-if="count !== undefined && count > 0" class="tooltip-stat">
+              <span class="stat-label">Obtained</span>
+              <span class="stat-value">{{ count }}x</span>
+            </div>
 
-          <div v-if="rolls && rolls.length > 0" class="tooltip-rolls">
-            <span class="rolls-label">Obtained at roll{{ rolls.length > 1 ? 's' : '' }}</span>
-            <div class="rolls-list">
-              <span v-for="(roll, i) in displayRolls" :key="i" class="roll-badge">
-                #{{ roll.toLocaleString() }}
-              </span>
-              <span v-if="hasMoreRolls" class="roll-more">
-                +{{ rolls.length - 12 }} more
-              </span>
+            <div v-if="rolls && rolls.length > 0" class="tooltip-rolls">
+              <span class="rolls-label">Obtained at roll{{ rolls.length > 1 ? 's' : '' }}</span>
+              <div class="rolls-list">
+                <span v-for="(roll, i) in displayRolls" :key="i" class="roll-badge">
+                  #{{ roll.toLocaleString() }}
+                </span>
+                <span v-if="hasMoreRolls" class="roll-more">
+                  +{{ rolls.length - 12 }} more
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -113,32 +116,48 @@ function updatePosition(e: MouseEvent) {
 .tooltip-container {
   position: fixed;
   z-index: 9999;
-  background: rgba(24, 24, 27, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 0.875rem;
   min-width: 180px;
   max-width: 240px;
   pointer-events: none;
+}
+
+.tooltip-border {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--varla-brown);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.tooltip-border::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 1px solid var(--varla-brown-light);
+  border-radius: 2px;
+}
+
+.tooltip-inner {
+  background: linear-gradient(180deg, var(--varla-bg-light) 0%, var(--varla-bg-dark) 100%);
+  border-radius: 4px;
+  padding: 0.75rem;
   box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.3),
-    0 10px 15px -3px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
+    0 4px 12px rgba(0, 0, 0, 0.5),
+    0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .tooltip-header {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 0.625rem;
+  margin-bottom: 0.625rem;
+  padding-bottom: 0.625rem;
+  border-bottom: 1px solid var(--varla-brown);
 }
 
 .tooltip-img {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
   image-rendering: pixelated;
   flex-shrink: 0;
@@ -152,15 +171,16 @@ function updatePosition(e: MouseEvent) {
 }
 
 .tooltip-name {
-  color: #fbbf24;
+  font-family: 'Cinzel', serif;
+  color: var(--varla-gold);
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   line-height: 1.2;
 }
 
 .tooltip-subtitle {
-  color: #71717a;
-  font-size: 0.7rem;
+  color: var(--varla-text-muted);
+  font-size: 0.65rem;
 }
 
 .tooltip-stat {
@@ -171,12 +191,12 @@ function updatePosition(e: MouseEvent) {
 }
 
 .stat-label {
-  color: #71717a;
-  font-size: 0.75rem;
+  color: var(--varla-text-muted);
+  font-size: 0.7rem;
 }
 
 .stat-value {
-  color: #22c55e;
+  color: #ffcc00;
   font-size: 0.75rem;
   font-weight: 600;
 }
@@ -186,8 +206,8 @@ function updatePosition(e: MouseEvent) {
 }
 
 .rolls-label {
-  color: #71717a;
-  font-size: 0.7rem;
+  color: var(--varla-text-muted);
+  font-size: 0.65rem;
   display: block;
   margin-bottom: 0.375rem;
 }
@@ -199,18 +219,18 @@ function updatePosition(e: MouseEvent) {
 }
 
 .roll-badge {
-  background: rgba(251, 191, 36, 0.1);
-  border: 1px solid rgba(251, 191, 36, 0.2);
-  border-radius: 4px;
+  background: var(--varla-bg-dark);
+  border: 1px solid var(--varla-brown);
+  border-radius: 2px;
   padding: 0.125rem 0.375rem;
-  font-size: 0.65rem;
-  color: #fbbf24;
+  font-size: 0.6rem;
+  color: var(--varla-gold-dark);
   font-variant-numeric: tabular-nums;
 }
 
 .roll-more {
-  color: #52525b;
-  font-size: 0.65rem;
+  color: var(--varla-text-muted);
+  font-size: 0.6rem;
   padding: 0.125rem 0.25rem;
   align-self: center;
 }

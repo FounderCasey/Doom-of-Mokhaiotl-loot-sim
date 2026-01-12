@@ -6,9 +6,17 @@ import CollectionLog from "@/components/CollectionLog.vue";
 
 <template>
   <div class="app-container">
+    <!-- Decorative corner elements -->
+    <div class="corner-decor top-left"></div>
+    <div class="corner-decor top-right"></div>
+    <div class="corner-decor bottom-left"></div>
+    <div class="corner-decor bottom-right"></div>
+
     <header class="app-header">
+      <div class="title-ornament"></div>
       <h1 class="app-title">Doom of Mokhaiotl</h1>
       <p class="app-subtitle">Loot Simulator</p>
+      <div class="title-ornament bottom"></div>
     </header>
 
     <ControlsBar />
@@ -27,7 +35,7 @@ import CollectionLog from "@/components/CollectionLog.vue";
       >
         OSRS Wiki
       </a>
-      <span class="footer-divider">|</span>
+      <span class="footer-divider"></span>
       <span>Ironman? Join</span>
       <a
         href="https://wiseoldman.net/groups/12095"
@@ -41,7 +49,26 @@ import CollectionLog from "@/components/CollectionLog.vue";
 </template>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+/* Varlamore Color Palette */
+:root {
+  --varla-bg-dark: #16100b;
+  --varla-bg-medium: #1e1610;
+  --varla-bg-light: #2a1f17;
+  --varla-brown: #3c3022;
+  --varla-brown-light: #534331;
+  --varla-gold: #e9dcb2;
+  --varla-gold-bright: #f4e9c4;
+  --varla-gold-dark: #c4a862;
+  --varla-emerald: #14ad56;
+  --varla-emerald-light: #38d776;
+  --varla-cyan: #a9f2f5;
+  --varla-blue: #7189da;
+  --varla-sage: #86a880;
+  --varla-text: #d4c8a8;
+  --varla-text-muted: #8a7d65;
+}
 
 *,
 *::before,
@@ -57,33 +84,38 @@ html {
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: linear-gradient(180deg, #0a0a0f 0%, #12121a 50%, #0a0a0f 100%);
+  background: var(--varla-bg-dark);
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(60, 48, 34, 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(60, 48, 34, 0.3) 0%, transparent 50%),
+    linear-gradient(180deg, var(--varla-bg-dark) 0%, #1a130d 50%, var(--varla-bg-dark) 100%);
   background-attachment: fixed;
-  color: #e4e4e7;
+  color: var(--varla-text);
   min-height: 100vh;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - Varlamore style */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--varla-bg-medium);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--varla-brown-light);
   border-radius: 4px;
+  border: 1px solid var(--varla-brown);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: var(--varla-gold-dark);
 }
 </style>
 
@@ -95,30 +127,150 @@ body {
   align-items: center;
   padding: 3rem 1.5rem;
   gap: 1.5rem;
+  position: relative;
+}
+
+/* Decorative corner elements */
+.corner-decor {
+  position: fixed;
+  width: 80px;
+  height: 80px;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.corner-decor::before,
+.corner-decor::after {
+  content: '';
+  position: absolute;
+  background: var(--varla-gold-dark);
+}
+
+.corner-decor.top-left {
+  top: 20px;
+  left: 20px;
+}
+.corner-decor.top-left::before {
+  width: 40px;
+  height: 2px;
+  top: 0;
+  left: 0;
+}
+.corner-decor.top-left::after {
+  width: 2px;
+  height: 40px;
+  top: 0;
+  left: 0;
+}
+
+.corner-decor.top-right {
+  top: 20px;
+  right: 20px;
+}
+.corner-decor.top-right::before {
+  width: 40px;
+  height: 2px;
+  top: 0;
+  right: 0;
+}
+.corner-decor.top-right::after {
+  width: 2px;
+  height: 40px;
+  top: 0;
+  right: 0;
+}
+
+.corner-decor.bottom-left {
+  bottom: 20px;
+  left: 20px;
+}
+.corner-decor.bottom-left::before {
+  width: 40px;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+}
+.corner-decor.bottom-left::after {
+  width: 2px;
+  height: 40px;
+  bottom: 0;
+  left: 0;
+}
+
+.corner-decor.bottom-right {
+  bottom: 20px;
+  right: 20px;
+}
+.corner-decor.bottom-right::before {
+  width: 40px;
+  height: 2px;
+  bottom: 0;
+  right: 0;
+}
+.corner-decor.bottom-right::after {
+  width: 2px;
+  height: 40px;
+  bottom: 0;
+  right: 0;
 }
 
 .app-header {
   text-align: center;
   margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.title-ornament {
+  width: 120px;
+  height: 8px;
+  margin: 0 auto 1rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title-ornament::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--varla-gold-dark), transparent);
+}
+
+.title-ornament::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: var(--varla-gold-dark);
+  transform: rotate(45deg);
+  position: relative;
+  z-index: 1;
+}
+
+.title-ornament.bottom {
+  margin: 0.75rem auto 0;
 }
 
 .app-title {
+  font-family: 'Cinzel', serif;
   font-size: 2.5rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.02em;
+  color: var(--varla-gold);
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(233, 220, 178, 0.15);
+  letter-spacing: 0.05em;
 }
 
 .app-subtitle {
-  font-size: 1rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
   font-weight: 500;
-  color: #71717a;
-  letter-spacing: 0.1em;
+  color: var(--varla-text-muted);
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
 }
 
 .main-content {
@@ -135,21 +287,26 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #52525b;
+  color: var(--varla-text-muted);
   font-size: 0.8rem;
 }
 
 .app-footer a {
-  color: #a1a1aa;
+  color: var(--varla-gold-dark);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .app-footer a:hover {
-  color: #fbbf24;
+  color: var(--varla-gold);
+  text-shadow: 0 0 8px rgba(233, 220, 178, 0.3);
 }
 
 .footer-divider {
-  color: #3f3f46;
+  width: 4px;
+  height: 4px;
+  background: var(--varla-brown-light);
+  transform: rotate(45deg);
+  margin: 0 0.5rem;
 }
 </style>
