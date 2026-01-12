@@ -7,10 +7,10 @@ import ItemTooltip from "./ItemTooltip.vue";
 const store = useLootStore();
 
 const images: Record<string, string> = {
-  cloth: "/src/assets/images/mokhaiotl_cloth.png",
-  eye: "/src/assets/images/eye_of_ayak.png",
-  treads: "/src/assets/images/avernic_treads.png",
-  pet: "/src/assets/images/dom.png",
+  cloth: "/images/mokhaiotl_cloth.png",
+  eye: "/images/eye_of_ayak.png",
+  treads: "/images/avernic_treads.png",
+  pet: "/images/dom.png",
 };
 
 const collectionItems = computed(() =>

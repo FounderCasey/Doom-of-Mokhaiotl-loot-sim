@@ -2,7 +2,7 @@ import { ref } from "vue";
 import { useLootStore, type LootDrop, type LootItem } from "@/stores/lootStore";
 import { DROP_RATES, DEMON_TEARS, UNIQUE_ITEMS } from "@/data/dropRates";
 
-const IMG = "/src/assets/images/";
+const IMG = "/images/";
 
 // Common loot table based on actual Doom drops
 const COMMON_LOOT = [

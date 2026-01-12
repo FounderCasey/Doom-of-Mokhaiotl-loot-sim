@@ -66,11 +66,11 @@ export const useLootStore = defineStore("loot", () => {
 
   function getItemImage(itemId: string): string | null {
     const images: Record<string, string> = {
-      cloth: "/src/assets/images/mokhaiotl_cloth.png",
-      eye: "/src/assets/images/eye_of_ayak.png",
-      treads: "/src/assets/images/avernic_treads.png",
-      pet: "/src/assets/images/dom.png",
-      demon_tears: "/src/assets/images/demon_tear.png",
+      cloth: "/images/mokhaiotl_cloth.png",
+      eye: "/images/eye_of_ayak.png",
+      treads: "/images/avernic_treads.png",
+      pet: "/images/dom.png",
+      demon_tears: "/images/demon_tear.png",
     };
     return images[itemId] || null;
   }
