@@ -1,1 +1,130 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+@theme {
+  /* Varlamore Color Palette */
+  --color-varla-bg-dark: #16100b;
+  --color-varla-bg-medium: #1e1610;
+  --color-varla-bg-light: #2a1f17;
+  --color-varla-brown: #3c3022;
+  --color-varla-brown-light: #534331;
+  --color-varla-gold: #e9dcb2;
+  --color-varla-gold-bright: #f4e9c4;
+  --color-varla-gold-dark: #c4a862;
+  --color-varla-emerald: #14ad56;
+  --color-varla-emerald-light: #38d776;
+  --color-varla-cyan: #a9f2f5;
+  --color-varla-text: #d4c8a8;
+  --color-varla-text-muted: #8a7d65;
+
+  /* Unique/Rare highlight colors */
+  --color-rare-orange: #e07020;
+  --color-rare-orange-light: #ff9040;
+  --color-rare-glow: rgba(255, 140, 50, 0.5);
+  --color-rare-yellow: #ffcc00;
+
+  /* Fonts */
+  --font-cinzel: 'Cinzel', serif;
+  --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Custom animations */
+  --animate-unique-glow: unique-glow 2s ease-in-out infinite;
+}
+
+@keyframes unique-glow {
+  0%, 100% { box-shadow: 0 0 10px rgba(255, 140, 50, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(255, 160, 60, 0.8); }
+}
+
+/* Base styles */
+body {
+  font-family: var(--font-inter);
+  background: var(--color-varla-bg-dark);
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(60, 48, 34, 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(60, 48, 34, 0.3) 0%, transparent 50%),
+    linear-gradient(180deg, var(--color-varla-bg-dark) 0%, #1a130d 50%, var(--color-varla-bg-dark) 100%);
+  background-attachment: fixed;
+  color: var(--color-varla-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-varla-bg-medium);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-varla-brown-light);
+  border-radius: 4px;
+  border: 1px solid var(--color-varla-brown);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-varla-gold-dark);
+}
+
+/* OSRS-style pixelated images */
+.pixelated {
+  image-rendering: pixelated;
+}
+
+/* Text outline for item counts */
+.text-outline {
+  text-shadow:
+    1px 1px 0 var(--color-varla-bg-dark),
+    -1px -1px 0 var(--color-varla-bg-dark),
+    1px -1px 0 var(--color-varla-bg-dark),
+    -1px 1px 0 var(--color-varla-bg-dark);
+}
+
+/* Double border card style */
+.card-border {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--color-varla-brown);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.card-border::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid var(--color-varla-brown-light);
+  border-radius: 2px;
+}
+
+/* Unique card glow state */
+.card-border-unique {
+  border-color: var(--color-rare-orange) !important;
+  box-shadow: 0 0 20px rgba(255, 140, 50, 0.4), inset 0 0 20px rgba(255, 140, 50, 0.15);
+}
+
+.card-border-unique::before {
+  border-color: var(--color-rare-orange-light) !important;
+}
+
+/* Tooltip border */
+.tooltip-border {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--color-varla-brown);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.tooltip-border::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 1px solid var(--color-varla-brown-light);
+  border-radius: 2px;
+}

@@ -61,7 +61,7 @@ function updatePosition(e: MouseEvent) {
 
 <template>
   <div
-    class="tooltip-trigger"
+    class="contents"
     @mouseenter="onMouseEnter"
     @mousemove="onMouseMove"
     @mouseleave="onMouseLeave"
@@ -72,31 +72,35 @@ function updatePosition(e: MouseEvent) {
       <Transition name="tooltip">
         <div
           v-if="show"
-          class="tooltip-container"
+          class="fixed z-[9999] min-w-[180px] max-w-[240px] pointer-events-none"
           :style="{ left: tooltipX + 'px', top: tooltipY + 'px' }"
         >
           <div class="tooltip-border"></div>
-          <div class="tooltip-inner">
-            <div class="tooltip-header">
-              <img v-if="image" :src="image" class="tooltip-img" />
-              <div class="tooltip-title">
-                <span class="tooltip-name">{{ name }}</span>
-                <span v-if="subtitle" class="tooltip-subtitle">{{ subtitle }}</span>
+          <div class="tooltip-inner rounded p-3">
+            <div class="flex items-center gap-2.5 mb-2.5 pb-2.5 border-b border-varla-brown">
+              <img v-if="image" :src="image" class="w-8 h-8 object-contain pixelated shrink-0" />
+              <div class="flex flex-col gap-0.5 min-w-0">
+                <span class="font-cinzel text-varla-gold font-semibold text-[0.85rem] leading-tight">{{ name }}</span>
+                <span v-if="subtitle" class="text-varla-text-muted text-[0.65rem]">{{ subtitle }}</span>
               </div>
             </div>
 
-            <div v-if="count !== undefined && count > 0" class="tooltip-stat">
-              <span class="stat-label">Obtained</span>
-              <span class="stat-value">{{ count }}x</span>
+            <div v-if="count !== undefined && count > 0" class="flex justify-between items-center mb-2">
+              <span class="text-varla-text-muted text-[0.7rem]">Obtained</span>
+              <span class="text-rare-yellow text-[0.75rem] font-semibold">{{ count }}x</span>
             </div>
 
-            <div v-if="rolls && rolls.length > 0" class="tooltip-rolls">
-              <span class="rolls-label">Obtained at roll{{ rolls.length > 1 ? 's' : '' }}</span>
-              <div class="rolls-list">
-                <span v-for="(roll, i) in displayRolls" :key="i" class="roll-badge">
+            <div v-if="rolls && rolls.length > 0" class="mt-2">
+              <span class="text-varla-text-muted text-[0.65rem] block mb-1.5">Obtained at roll{{ rolls.length > 1 ? 's' : '' }}</span>
+              <div class="flex flex-wrap gap-1">
+                <span
+                  v-for="(roll, i) in displayRolls"
+                  :key="i"
+                  class="bg-varla-bg-dark border border-varla-brown rounded-sm py-0.5 px-1.5 text-[0.6rem] text-varla-gold-dark tabular-nums"
+                >
                   #{{ roll.toLocaleString() }}
                 </span>
-                <span v-if="hasMoreRolls" class="roll-more">
+                <span v-if="hasMoreRolls" class="text-varla-text-muted text-[0.6rem] py-0.5 px-1 self-center">
                   +{{ rolls.length - 12 }} more
                 </span>
               </div>
@@ -109,130 +113,11 @@ function updatePosition(e: MouseEvent) {
 </template>
 
 <style scoped>
-.tooltip-trigger {
-  display: contents;
-}
-
-.tooltip-container {
-  position: fixed;
-  z-index: 9999;
-  min-width: 180px;
-  max-width: 240px;
-  pointer-events: none;
-}
-
-.tooltip-border {
-  position: absolute;
-  inset: 0;
-  border: 2px solid var(--varla-brown);
-  border-radius: 4px;
-  pointer-events: none;
-}
-
-.tooltip-border::before {
-  content: '';
-  position: absolute;
-  inset: 2px;
-  border: 1px solid var(--varla-brown-light);
-  border-radius: 2px;
-}
-
 .tooltip-inner {
-  background: linear-gradient(180deg, var(--varla-bg-light) 0%, var(--varla-bg-dark) 100%);
-  border-radius: 4px;
-  padding: 0.75rem;
+  background: linear-gradient(180deg, var(--color-varla-bg-light) 0%, var(--color-varla-bg-dark) 100%);
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.5),
     0 8px 24px rgba(0, 0, 0, 0.3);
-}
-
-.tooltip-header {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-  margin-bottom: 0.625rem;
-  padding-bottom: 0.625rem;
-  border-bottom: 1px solid var(--varla-brown);
-}
-
-.tooltip-img {
-  width: 32px;
-  height: 32px;
-  object-fit: contain;
-  image-rendering: pixelated;
-  flex-shrink: 0;
-}
-
-.tooltip-title {
-  display: flex;
-  flex-direction: column;
-  gap: 0.125rem;
-  min-width: 0;
-}
-
-.tooltip-name {
-  font-family: 'Cinzel', serif;
-  color: var(--varla-gold);
-  font-weight: 600;
-  font-size: 0.85rem;
-  line-height: 1.2;
-}
-
-.tooltip-subtitle {
-  color: var(--varla-text-muted);
-  font-size: 0.65rem;
-}
-
-.tooltip-stat {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.stat-label {
-  color: var(--varla-text-muted);
-  font-size: 0.7rem;
-}
-
-.stat-value {
-  color: #ffcc00;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.tooltip-rolls {
-  margin-top: 0.5rem;
-}
-
-.rolls-label {
-  color: var(--varla-text-muted);
-  font-size: 0.65rem;
-  display: block;
-  margin-bottom: 0.375rem;
-}
-
-.rolls-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-}
-
-.roll-badge {
-  background: var(--varla-bg-dark);
-  border: 1px solid var(--varla-brown);
-  border-radius: 2px;
-  padding: 0.125rem 0.375rem;
-  font-size: 0.6rem;
-  color: var(--varla-gold-dark);
-  font-variant-numeric: tabular-nums;
-}
-
-.roll-more {
-  color: var(--varla-text-muted);
-  font-size: 0.6rem;
-  padding: 0.125rem 0.25rem;
-  align-self: center;
 }
 
 /* Transition */
